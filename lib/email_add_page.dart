@@ -68,9 +68,9 @@ class _EmailAddPageState extends State<EmailAddPage> {
                         ),
                       ),
                       const SizedBox(height: 20),
-                      Align(
+                      const Align(
                         alignment: Alignment.centerLeft,
-                        child: const Text(
+                        child: Text(
                           "Please enter your Email Address.",
                           style: TextStyle(
                             color: Color(0xFF645E5E),

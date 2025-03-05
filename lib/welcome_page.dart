@@ -7,7 +7,8 @@ class WelcomePage extends StatefulWidget {
   _WelcomePageState createState() => _WelcomePageState();
 }
 
-class _WelcomePageState extends State<WelcomePage> with TickerProviderStateMixin {
+class _WelcomePageState extends State<WelcomePage>
+    with TickerProviderStateMixin {
   late AnimationController _fadeController;
   late AnimationController _slideController;
   late Animation<double> _fadeAnimation;
@@ -27,8 +28,10 @@ class _WelcomePageState extends State<WelcomePage> with TickerProviderStateMixin
       vsync: this,
     );
 
-    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(_fadeController);
-    _slideAnimation = Tween<Offset>(begin: const Offset(0, 1), end: Offset.zero).animate(
+    _fadeAnimation =
+        Tween<double>(begin: 0.0, end: 1.0).animate(_fadeController);
+    _slideAnimation =
+        Tween<Offset>(begin: const Offset(0, 1), end: Offset.zero).animate(
       CurvedAnimation(
         parent: _slideController,
         curve: Curves.easeOut,
@@ -77,8 +80,8 @@ class _WelcomePageState extends State<WelcomePage> with TickerProviderStateMixin
               const SizedBox(height: 20),
               SlideTransition(
                 position: _slideAnimation,
-                child: Column(
-                  children: const [
+                child: const Column(
+                  children: [
                     Text(
                       'Start Crafting Your',
                       style: TextStyle(
