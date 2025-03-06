@@ -55,5 +55,29 @@
       });
     });
   </script>
+
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyAEghQgRVSbgjjMxJGydT1kcdJ8RZ5qjqs",
+    authDomain: "speclab-c883e.firebaseapp.com",
+    projectId: "speclab-c883e",
+    storageBucket: "speclab-c883e.firebasestorage.app",
+    messagingSenderId: "215408451039",
+    appId: "1:215408451039:web:60b4c1f347cd2b5a8ef86a",
+    measurementId: "G-72BSP4CRJC"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+</script>
 </body>
 </html>
