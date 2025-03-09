@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'auth_service.dart'; // Import the AuthService class
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -14,6 +15,9 @@ class _SignInPageState extends State<SignInPage> {
   final TextEditingController _passwordController = TextEditingController();
   bool _isFormValid = false;
   bool _isEmailValid = true;
+
+  final AuthService _authService =
+      AuthService(); // Create an instance of AuthService
 
   void _validateForm() {
     setState(() {
@@ -59,38 +63,21 @@ class _SignInPageState extends State<SignInPage> {
     }
 
     try {
-      UserCredential userCredential =
-          await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: _emailController.text,
-        password: _passwordController.text,
+      await _authService.signInWithEmailAndPassword(
+        _emailController.text,
+        _passwordController.text,
       );
-      print("User signed in: ${userCredential.user!.uid}");
-      // Navigate to the next screen or perform any action after successful sign-in
+      print("Login successful");
+
+      // Navigate to the Dashboard after successful login
+      Navigator.pushReplacementNamed(context, '/dashboard');
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('No user found for that email.'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      } else if (e.code == 'wrong-password') {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Wrong password provided for that user.'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error: ${e.message}'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
-    } catch (e) {
-      print("Error: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.message ?? "An error occurred during login"),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
   }
 

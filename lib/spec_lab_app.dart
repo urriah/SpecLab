@@ -4,6 +4,7 @@ import 'welcome_page.dart';
 import 'signin_page.dart';
 import 'signup_page.dart';
 import 'email_add_page.dart';
+import 'dashboard.dart';
 
 class SpecLabApp extends StatelessWidget {
   const SpecLabApp({super.key});
@@ -24,6 +25,7 @@ class SpecLabApp extends StatelessWidget {
         '/signin': (context) => const SignInPage(),
         '/signup': (context) => const SignUpPage(),
         '/emailAdd': (context) => const EmailAddPage(),
+        '/dashboard': (context) => const DashboardPage(),
       },
     );
   }
