@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'auth_service.dart'; // Import your AuthService
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -12,9 +14,12 @@ class _SignUpPageState extends State<SignUpPage> {
   bool _isConfirmPasswordVisible = false;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
   bool _isPasswordMatch = true;
   bool _isFormValid = false;
+
+  final AuthService _authService = AuthService(); //AuthService
 
   @override
   void initState() {
@@ -26,7 +31,8 @@ class _SignUpPageState extends State<SignUpPage> {
 
   void _validatePassword() {
     setState(() {
-      _isPasswordMatch = _passwordController.text == _confirmPasswordController.text;
+      _isPasswordMatch =
+          _passwordController.text == _confirmPasswordController.text;
       _validateForm();
     });
   }
@@ -47,6 +53,41 @@ class _SignUpPageState extends State<SignUpPage> {
         backgroundColor: Colors.red,
       ),
     );
+  }
+
+  void _showErrorNotification(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.red,
+      ),
+    );
+  }
+
+  Future<void> _signUpWithEmailAndPassword() async {
+    if (!_isFormValid) {
+      _showEmptyFieldsNotification();
+      return;
+    }
+
+    if (!_isPasswordMatch) {
+      _showErrorNotification("Passwords do not match");
+      return;
+    }
+
+    try {
+      await _authService.signUpWithEmailAndPassword(
+        _emailController.text,
+        _passwordController.text,
+      );
+      print("User registered successfully");
+      // Navigate to the next screen or perform any action after successful sign-up
+      Navigator.pushNamed(context, '/emailAdd'); // Example navigation
+    } on FirebaseAuthException catch (e) {
+      _showErrorNotification(e.message ?? "An error occurred during sign-up");
+    } catch (e) {
+      _showErrorNotification("An unexpected error occurred");
+    }
   }
 
   @override
@@ -101,7 +142,9 @@ class _SignUpPageState extends State<SignUpPage> {
                           color: Color(0xFF381E72),
                         ),
                       ),
-                      const SizedBox(height: 30,),
+                      const SizedBox(
+                        height: 30,
+                      ),
                       Container(
                         width: 333,
                         height: 60,
@@ -113,17 +156,20 @@ class _SignUpPageState extends State<SignUpPage> {
                         child: TextField(
                           controller: _emailController,
                           decoration: const InputDecoration(
-                            hintText: "Username",
-                            hintStyle: TextStyle(color: Color(0xFFB9B0B0),
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'Alexandria-Light'),
+                            hintText: "Email",
+                            hintStyle: TextStyle(
+                                color: Color(0xFFB9B0B0),
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Alexandria-Light'),
                             border: InputBorder.none,
                           ),
                           onChanged: (value) => _validateForm(),
                         ),
                       ),
-                      const SizedBox(height: 10,),
+                      const SizedBox(
+                        height: 10,
+                      ),
                       Container(
                         width: 333,
                         height: 60,
@@ -137,15 +183,18 @@ class _SignUpPageState extends State<SignUpPage> {
                           obscureText: !_isPasswordVisible,
                           decoration: InputDecoration(
                             hintText: "Password",
-                            hintStyle: const TextStyle(color: Color(0xFFB9B0B0),
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'Alexandria-Light'),
+                            hintStyle: const TextStyle(
+                                color: Color(0xFFB9B0B0),
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Alexandria-Light'),
                             border: InputBorder.none,
                             suffixIcon: IconButton(
                               padding: const EdgeInsets.only(bottom: 5),
                               icon: Icon(
-                                _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                                _isPasswordVisible
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
                                 color: const Color(0xFFB9B0B0),
                               ),
                               onPressed: () {
@@ -158,7 +207,9 @@ class _SignUpPageState extends State<SignUpPage> {
                           onChanged: (value) => _validatePassword(),
                         ),
                       ),
-                      const SizedBox(height: 10,),
+                      const SizedBox(
+                        height: 10,
+                      ),
                       Container(
                         width: 333,
                         height: 60,
@@ -172,20 +223,24 @@ class _SignUpPageState extends State<SignUpPage> {
                           obscureText: !_isConfirmPasswordVisible,
                           decoration: InputDecoration(
                             hintText: "Confirm Password",
-                            hintStyle: const TextStyle(color: Color(0xFFB9B0B0),
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'Alexandria-Light'),
+                            hintStyle: const TextStyle(
+                                color: Color(0xFFB9B0B0),
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Alexandria-Light'),
                             border: InputBorder.none,
                             suffixIcon: IconButton(
                               padding: const EdgeInsets.only(bottom: 5),
                               icon: Icon(
-                                _isConfirmPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                                _isConfirmPasswordVisible
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
                                 color: const Color(0xFFB9B0B0),
                               ),
                               onPressed: () {
                                 setState(() {
-                                  _isConfirmPasswordVisible = !_isConfirmPasswordVisible;
+                                  _isConfirmPasswordVisible =
+                                      !_isConfirmPasswordVisible;
                                 });
                               },
                             ),
@@ -201,7 +256,9 @@ class _SignUpPageState extends State<SignUpPage> {
                             style: TextStyle(color: Colors.red),
                           ),
                         ),
-                      const SizedBox(height: 40,),
+                      const SizedBox(
+                        height: 40,
+                      ),
                       Container(
                         width: 333,
                         height: 60,
@@ -217,16 +274,11 @@ class _SignUpPageState extends State<SignUpPage> {
                           borderRadius: BorderRadius.circular(100),
                         ),
                         child: ElevatedButton(
-                          onPressed: _isFormValid ? () {
-                            if (_emailController.text.isEmpty || _passwordController.text.isEmpty || _confirmPasswordController.text.isEmpty) {
-                              _showEmptyFieldsNotification();
-                            } else {
-                              Navigator.pushNamed(context, '/emailAdd');
-                              print("Signup clicked");
-                            }
-                          } : () {
-                            _showEmptyFieldsNotification();
-                          },
+                          onPressed: _isFormValid
+                              ? _signUpWithEmailAndPassword
+                              : () {
+                                  _showEmptyFieldsNotification();
+                                },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.transparent,
                             shadowColor: Colors.transparent,
@@ -245,7 +297,9 @@ class _SignUpPageState extends State<SignUpPage> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 10,),
+                      const SizedBox(
+                        height: 10,
+                      ),
                       TextButton(
                         onPressed: () {
                           Navigator.pushNamed(context, '/signin');

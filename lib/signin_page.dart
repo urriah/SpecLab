@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SignInPage extends StatefulWidget {
@@ -17,7 +18,9 @@ class _SignInPageState extends State<SignInPage> {
   void _validateForm() {
     setState(() {
       _isEmailValid = _validateEmail(_emailController.text);
-      _isFormValid = _isEmailValid && _emailController.text.isNotEmpty && _passwordController.text.isNotEmpty;
+      _isFormValid = _isEmailValid &&
+          _emailController.text.isNotEmpty &&
+          _passwordController.text.isNotEmpty;
     });
   }
 
@@ -44,6 +47,53 @@ class _SignInPageState extends State<SignInPage> {
     );
   }
 
+  Future<void> _signInWithEmailAndPassword() async {
+    if (!_isEmailValid) {
+      _showInvalidEmailNotification();
+      return;
+    }
+
+    if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
+      _showEmptyFieldsNotification();
+      return;
+    }
+
+    try {
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
+      print("User signed in: ${userCredential.user!.uid}");
+      // Navigate to the next screen or perform any action after successful sign-in
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('No user found for that email.'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      } else if (e.code == 'wrong-password') {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Wrong password provided for that user.'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error: ${e.message}'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } catch (e) {
+      print("Error: $e");
+    }
+  }
+
   @override
   void dispose() {
     _emailController.dispose();
@@ -60,7 +110,7 @@ class _SignInPageState extends State<SignInPage> {
         decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage('assets/images/bg.png'),
-            fit: BoxFit.cover, // Ensure the background image covers the entire screen
+            fit: BoxFit.cover,
           ),
         ),
         child: Column(
@@ -96,7 +146,9 @@ class _SignInPageState extends State<SignInPage> {
                           color: Color(0xFF381E72),
                         ),
                       ),
-                      const SizedBox(height: 20,),
+                      const SizedBox(
+                        height: 20,
+                      ),
                       Container(
                         width: 333,
                         height: 60,
@@ -109,10 +161,11 @@ class _SignInPageState extends State<SignInPage> {
                           controller: _emailController,
                           decoration: const InputDecoration(
                             hintText: "Email",
-                            hintStyle: TextStyle(color: Color(0xFFB9B0B0),
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'Alexandria-Light'),
+                            hintStyle: TextStyle(
+                                color: Color(0xFFB9B0B0),
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Alexandria-Light'),
                             border: InputBorder.none,
                           ),
                           onChanged: (value) => _validateForm(),
@@ -126,7 +179,9 @@ class _SignInPageState extends State<SignInPage> {
                             style: TextStyle(color: Colors.red),
                           ),
                         ),
-                      const SizedBox(height: 10,),
+                      const SizedBox(
+                        height: 10,
+                      ),
                       Container(
                         width: 333,
                         height: 60,
@@ -137,18 +192,21 @@ class _SignInPageState extends State<SignInPage> {
                         ),
                         child: TextField(
                           controller: _passwordController,
-                          obscureText: !_isPasswordVisible, // Hide the password input
+                          obscureText: !_isPasswordVisible,
                           decoration: InputDecoration(
                             hintText: "Password",
-                            hintStyle: const TextStyle(color: Color(0xFFB9B0B0),
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'Alexandria-Light'),
+                            hintStyle: const TextStyle(
+                                color: Color(0xFFB9B0B0),
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Alexandria-Light'),
                             border: InputBorder.none,
                             suffixIcon: IconButton(
                               padding: const EdgeInsets.only(bottom: 5),
                               icon: Icon(
-                                _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                                _isPasswordVisible
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
                                 color: const Color(0xFFB9B0B0),
                               ),
                               onPressed: () {
@@ -162,9 +220,9 @@ class _SignInPageState extends State<SignInPage> {
                         ),
                       ),
                       Align(
-                        alignment: Alignment.centerRight, // Align to the right
+                        alignment: Alignment.centerRight,
                         child: Padding(
-                          padding: const EdgeInsets.only(right: 15), // Add right padding
+                          padding: const EdgeInsets.only(right: 15),
                           child: TextButton(
                             onPressed: () {
                               print("Forgot Password clicked");
@@ -187,8 +245,8 @@ class _SignInPageState extends State<SignInPage> {
                         decoration: BoxDecoration(
                           gradient: const LinearGradient(
                             colors: [
-                              Color(0xFF1877F2), // Start color
-                              Color(0xFF0E458C), // End color
+                              Color(0xFF1877F2),
+                              Color(0xFF0E458C),
                             ],
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
@@ -196,17 +254,11 @@ class _SignInPageState extends State<SignInPage> {
                           borderRadius: BorderRadius.circular(100),
                         ),
                         child: ElevatedButton(
-                          onPressed: _isFormValid ? () {
-                            if (!_isEmailValid) {
-                              _showInvalidEmailNotification();
-                            } else if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
-                              _showEmptyFieldsNotification();
-                            } else {
-                              print("Login clicked");
-                            }
-                          } : () {
-                            _showEmptyFieldsNotification();
-                          },
+                          onPressed: _isFormValid
+                              ? _signInWithEmailAndPassword
+                              : () {
+                                  _showEmptyFieldsNotification();
+                                },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.transparent,
                             shadowColor: Colors.transparent,
@@ -225,7 +277,9 @@ class _SignInPageState extends State<SignInPage> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 10,),
+                      const SizedBox(
+                        height: 10,
+                      ),
                       TextButton(
                         onPressed: () {
                           Navigator.pushNamed(context, '/signup');
