@@ -67,9 +67,24 @@ class _SignInPageState extends State<SignInPage> {
         _emailController.text,
         _passwordController.text,
       );
-      print("Login successful");
 
-      // Navigate to the Dashboard after successful login
+      // Check if the email is verified
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user != null && !user.emailVerified) {
+        // If email is not verified, sign out and redirect to verification prompt
+        await _authService.signOut();
+        Navigator.pushNamed(context, '/emailVerificationPrompt');
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Please verify your email to continue.'),
+            backgroundColor: Colors.orange,
+          ),
+        );
+        return;
+      }
+
+      // If email is verified, proceed to the dashboard
+      print("Login successful");
       Navigator.pushReplacementNamed(context, '/dashboard');
     } on FirebaseAuthException catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(

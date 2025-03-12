@@ -12,6 +12,9 @@ class AuthService {
         email: email,
         password: password,
       );
+
+      // Send email verification
+      await userCredential.user!.sendEmailVerification();
       return userCredential;
     } on FirebaseAuthException catch (e) {
       throw e;
@@ -26,7 +29,33 @@ class AuthService {
         email: email,
         password: password,
       );
+
+      // Check if email is verified
+      if (!userCredential.user!.emailVerified) {
+        await _auth.signOut(); // Sign out the user if email is not verified
+        throw FirebaseAuthException(
+          code: 'email-not-verified',
+          message: 'Please verify your email before signing in.',
+        );
+      }
       return userCredential;
+    } on FirebaseAuthException catch (e) {
+      throw e;
+    }
+  }
+
+  // Resend verification email
+  Future<void> resendVerificationEmail() async {
+    try {
+      User? user = _auth.currentUser;
+      if (user != null && !user.emailVerified) {
+        await user.sendEmailVerification();
+      } else {
+        throw FirebaseAuthException(
+          code: 'no-user',
+          message: 'No unverified user found.',
+        );
+      }
     } on FirebaseAuthException catch (e) {
       throw e;
     }

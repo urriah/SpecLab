@@ -19,7 +19,7 @@ class _SignUpPageState extends State<SignUpPage> {
   bool _isPasswordMatch = true;
   bool _isFormValid = false;
 
-  final AuthService _authService = AuthService(); //AuthService
+  final AuthService _authService = AuthService(); // AuthService
 
   @override
   void initState() {
@@ -81,8 +81,17 @@ class _SignUpPageState extends State<SignUpPage> {
         _passwordController.text,
       );
       print("User registered successfully");
-      // Navigate to the next screen or perform any action after successful sign-up
-      Navigator.pushNamed(context, '/emailAdd'); // Example navigation
+
+      // Notify the user to check their email for verification
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Verification email sent. Please check your email.'),
+          backgroundColor: Colors.green,
+        ),
+      );
+
+      // Navigate to a screen prompting the user to verify their email
+      Navigator.pushNamed(context, '/emailVerificationPrompt');
     } on FirebaseAuthException catch (e) {
       _showErrorNotification(e.message ?? "An error occurred during sign-up");
     } catch (e) {
