@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'auth_service.dart'; // Import your AuthService
+import 'auth_service.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -19,7 +19,7 @@ class _SignUpPageState extends State<SignUpPage> {
   bool _isPasswordMatch = true;
   bool _isFormValid = false;
 
-  final AuthService _authService = AuthService(); // AuthService
+  final AuthService _authService = AuthService();
 
   @override
   void initState() {
@@ -82,7 +82,7 @@ class _SignUpPageState extends State<SignUpPage> {
       );
       print("User registered successfully");
 
-      // Notify the user to check their email for verification
+      //notify the user for their email
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Verification email sent. Please check your email.'),
@@ -90,7 +90,6 @@ class _SignUpPageState extends State<SignUpPage> {
         ),
       );
 
-      // Navigate to a screen prompting the user to verify their email
       Navigator.pushNamed(context, '/emailVerificationPrompt');
     } on FirebaseAuthException catch (e) {
       _showErrorNotification(e.message ?? "An error occurred during sign-up");

@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'auth_service.dart'; // Import the AuthService class
+import 'auth_service.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -16,8 +16,7 @@ class _SignInPageState extends State<SignInPage> {
   bool _isFormValid = false;
   bool _isEmailValid = true;
 
-  final AuthService _authService =
-      AuthService(); // Create an instance of AuthService
+  final AuthService _authService = AuthService(); //create an instance
 
   void _validateForm() {
     setState(() {
@@ -68,10 +67,10 @@ class _SignInPageState extends State<SignInPage> {
         _passwordController.text,
       );
 
-      // Check if the email is verified
+      //check email is verified
       User? user = FirebaseAuth.instance.currentUser;
       if (user != null && !user.emailVerified) {
-        // If email is not verified, sign out and redirect to verification prompt
+        //if email is not verified
         await _authService.signOut();
         Navigator.pushNamed(context, '/emailVerificationPrompt');
         ScaffoldMessenger.of(context).showSnackBar(
@@ -83,7 +82,7 @@ class _SignInPageState extends State<SignInPage> {
         return;
       }
 
-      // If email is verified, proceed to the dashboard
+      // verified email proceed to dashboard
       print("Login successful");
       Navigator.pushReplacementNamed(context, '/dashboard');
     } on FirebaseAuthException catch (e) {
