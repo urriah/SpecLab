@@ -220,25 +220,8 @@ class _SignInPageState extends State<SignInPage> {
                           onChanged: (value) => _validateForm(),
                         ),
                       ),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Padding(
-                          padding: const EdgeInsets.only(right: 15),
-                          child: TextButton(
-                            onPressed: () {
-                              print("Forgot Password clicked");
-                            },
-                            child: const Text(
-                              "Forgot Password?",
-                              style: TextStyle(
-                                color: Color(0xFF131212),
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'Alexandria-Light',
-                              ),
-                            ),
-                          ),
-                        ),
+                      const SizedBox(
+                        height: 30,
                       ),
                       Container(
                         width: 333,

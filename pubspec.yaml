@@ -29,8 +29,25 @@ flutter:
     - assets/images/welcomepage_bg.png
     - assets/images/bg.png
     - assets/images/speclab.png
+    - assets/images/bg1.png
+    - assets/images/speclab1.png
     - assets/images/google_logo.png
-
+    - assets/images/1.png
+    - assets/images/2.png
+    - assets/images/3.png
+    - assets/images/4.png
+    - assets/images/CPU.png
+    - assets/images/GPU.png
+    - assets/images/MB.png
+    - assets/images/RAM.png
+    - assets/images/Storage.png
+    - assets/images/PSU.png
+    - assets/images/FAN.png
+    - assets/images/Case.png
+    - assets/images/Build_Now.png
+    - assets/images/Profile.png
+    - assets/images/Your_Builds.png
+    - assets/images/Logo_Trsp.png
   #  - images/a_dot_burr.jpeg
   #  - images/a_dot_ham.jpeg
   fonts:
