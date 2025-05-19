@@ -1,0 +1,2 @@
+D:/repos/SpecLab/android/app/.cxx/RelWithDebInfo/4n311746/arm64-v8a/CMakeFiles/edit_cache.dir
+D:/repos/SpecLab/android/app/.cxx/RelWithDebInfo/4n311746/arm64-v8a/CMakeFiles/rebuild_cache.dir
