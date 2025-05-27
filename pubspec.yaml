@@ -30,10 +30,12 @@ flutter_icons:
 flutter:
   uses-material-design: true
   assets:
+    - assets/images/speclab1.png
     - assets/images/Logo_Landscape_Trsp.png
     - assets/images/pc_illustration.png
     - assets/images/welcomepage_bg.png
     - assets/images/bg.png
+    - assets/images/bg1.png
     - assets/images/speclab.png
     - assets/images/google_logo.png
     - assets/images/1.png

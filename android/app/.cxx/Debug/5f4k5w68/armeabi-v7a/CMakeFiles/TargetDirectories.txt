@@ -1,0 +1,2 @@
+C:/Users/Alfer/Desktop/Jig2/SpecLab_Final/Spec_Lab/SpecLab/android/app/.cxx/Debug/5f4k5w68/armeabi-v7a/CMakeFiles/edit_cache.dir
+C:/Users/Alfer/Desktop/Jig2/SpecLab_Final/Spec_Lab/SpecLab/android/app/.cxx/Debug/5f4k5w68/armeabi-v7a/CMakeFiles/rebuild_cache.dir

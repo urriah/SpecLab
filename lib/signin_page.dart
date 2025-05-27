@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'auth_service.dart';
+import 'dashboard.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -84,7 +85,13 @@ class _SignInPageState extends State<SignInPage> {
 
       // verified email proceed to dashboard
       print("Login successful");
-      Navigator.pushReplacementNamed(context, '/dashboard');
+      String userEmail = _emailController.text.trim();
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => DashboardPage(userEmail: userEmail),
+        ),
+      );
     } on FirebaseAuthException catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

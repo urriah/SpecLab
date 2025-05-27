@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'builds_page.dart';
+
 
 class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key});
+  final String userEmail;
+
+  const ProfilePage({super.key, required this.userEmail});
 
   @override
   Widget build(BuildContext context) {
@@ -32,91 +34,135 @@ class ProfilePage extends StatelessWidget {
             fit: BoxFit.cover,
           ),
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Profile Photo
-            Stack(
-              children: [
-                CircleAvatar(
-                  radius: 60,
-                  backgroundImage: const AssetImage('assets/images/default_profile.png'), // Default profile image
-                  backgroundColor: Colors.grey[300],
-                ),
-                Positioned(
-                  bottom: 0,
-                  right: 0,
-                  child: IconButton(
-                    icon: const Icon(Icons.camera_alt, color: Color(0xFF381E72)),
-                    onPressed: () {
-                      // Add functionality to upload a profile photo
-                    },
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(height: 60),
+
+              // Default Profile Photo
+              CircleAvatar(
+                radius: 50,
+                backgroundColor: Color(0xFF381E72),
+                backgroundImage: AssetImage('assets/images/default_profile.png'), // <-- Place your default image here
+                child: ClipOval(
+                  child: Image.asset(
+                    'assets/images/default_profile.png',
+                    fit: BoxFit.cover,
+                    width: 80,
+                    height: 80,
                   ),
                 ),
-              ],
-            ),
-            const SizedBox(height: 20),
+              ),
 
-            // User Name
-            const Text(
-              'John Doe', // Replace with dynamic user name if needed
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
+              const SizedBox(height: 10),
+              
+              Text(
+                userEmail,
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
+                  color: Color(0xFF381E72),
+                ),
+              ),
+
+              const SizedBox(height: 4),
+
+              // User Role
+              const Text(
+                'User',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.normal,
+                  color: Color(0xFF381E72),
+                ),
+              ),
+
+              const SizedBox(height: 40),
+
+              // Menu Items
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 40),
+                child: Column(
+                  children: [
+                    _buildMenuItem(
+                      icon: Icons.edit,
+                      label: 'Your Builds',
+                      onTap: () {
+                        Navigator.pushNamed(context, '/builds'); // Navigate to Builds Page
+                      },
+                    ),      
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 40),
+
+              // Sign Out Button
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 40),
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    Navigator.popUntil(context, (route) => route.isFirst); // Navigate back to the login screen
+                  },
+                  icon: const Icon(Icons.logout, color: Colors.white),
+                  label: const Text(
+                    'Log out',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF381E72),
+                    minimumSize: const Size.fromHeight(44),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 40),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMenuItem({
+    required IconData icon,
+    required String label,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(6),
+      child: Row(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: const Color(0xFF381E72),
+              borderRadius: BorderRadius.circular(50),
+            ),
+            padding: const EdgeInsets.all(10),
+            child: Icon(icon, color: Colors.white, size: 18),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              label,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
                 color: Color(0xFF381E72),
               ),
             ),
-            const SizedBox(height: 40),
-
-            // View Builds Button
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const BuildsPage(), // Pass saved builds if available
-                  ),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF381E72),
-                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              child: const Text(
-                'View Your Builds',
-                style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
-
-            // Logout Button
-            ElevatedButton(
-              onPressed: () {
-                Navigator.popUntil(context, (route) => route.isFirst); // Navigate back to the login screen
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red,
-                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              child: const Text(
-                'Log Out',
-                style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ],
-        ),
+          ),
+          const Icon(Icons.chevron_right, color: Color(0xFF381E72)),
+        ],
       ),
     );
   }

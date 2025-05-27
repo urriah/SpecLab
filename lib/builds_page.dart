@@ -19,22 +19,22 @@ class _BuildsPageState extends State<BuildsPage> {
     fetchBuilds();
   }
 
-  Future<void> fetchBuilds() async {
-    setState(() => isLoading = true);
-    final response = await http.get(Uri.parse('flu'));
-    if (response.statusCode == 200) {
-      final List<dynamic> data = json.decode(response.body);
-      setState(() {
-        builds = data.cast<Map<String, dynamic>>();
-        isLoading = false;
-      });
-    } else {
-      setState(() => isLoading = false);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to fetch builds: ${response.body}')),
-      );
-    }
+Future<void> fetchBuilds() async {
+  setState(() => isLoading = true);
+  final response = await http.get(Uri.parse('https://crud-mryv.onrender.com/builds/'));
+  if (response.statusCode == 200) {
+    final List<dynamic> data = json.decode(response.body);
+    setState(() {
+      builds = data.cast<Map<String, dynamic>>();
+      isLoading = false;
+    });
+  } else {
+    setState(() => isLoading = false);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Failed to fetch builds: ${response.body}')),
+    );
   }
+}
 
   Future<void> updateBuild(int index, String newName) async {
     final build = builds[index];

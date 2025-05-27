@@ -15,11 +15,55 @@ class BuildingPage extends StatefulWidget {
 class _BuildingPageState extends State<BuildingPage> {
   final Map<String, String> _selectedItems = {}; // Store selected items for each component
   final Map<String, List<String>> _compatibilityMap = {
-    'Intel i5': ['ASUS ROG', 'MSI Tomahawk'],
-    'AMD Ryzen 5': ['Gigabyte Aorus', 'MSI Tomahawk'],
-    'Intel i7': ['ASUS ROG', 'Gigabyte Aorus'],
-    'AMD Ryzen 7': ['MSI Tomahawk', 'Gigabyte Aorus'],
-  }; // Compatibility map for processors and motherboards
+    'Intel Core i3-12100F': [
+      'MSI PRO B660M-A DDR4',
+      'ASUS Prime B660M-A D4',
+      'Gigabyte B660M DS3H AX DDR4',
+      'ASRock B660M Pro RS',
+    ],
+    'Intel Core i5-12400F': [
+      'MSI PRO B660M-A DDR4',
+      'ASUS TUF Gaming B660-PLUS',
+      'ASRock B660M Steel Legend',
+      'Gigabyte B660M AORUS PRO AX',
+    ],
+    'Intel Core i7-13700K': [
+      'ASUS ROG Strix Z690-F',
+      'Gigabyte Z690 AORUS Elite AX',
+      'MSI MPG Z690 Carbon WiFi',
+      'ASRock Z690 Phantom Gaming 4',
+    ],
+    'Intel Core i9-13900K': [
+      'ASUS ROG Maximus Z790 Hero',
+      'MSI MEG Z790 ACE',
+      'Gigabyte Z790 AORUS Master',
+      'ASRock Z790 Taichi',
+    ],
+    'AMD Ryzen 5 5600X': [
+      'MSI B550 Tomahawk',
+      'ASRock B550 Steel Legend',
+      'ASUS TUF Gaming B550-PLUS',
+      'Gigabyte B550 AORUS Elite',
+    ],
+    'AMD Ryzen 7 5800X': [
+      'MSI MPG B550 Gaming Plus',
+      'Gigabyte B550 Vision D',
+      'ASUS ROG Strix B550-F',
+      'ASRock B550 Phantom Gaming 4',
+    ],
+    'AMD Ryzen 7 7700X': [
+      'ASUS ROG Strix B650E-F',
+      'Gigabyte B650 AORUS Elite AX',
+      'MSI PRO B650-P WiFi',
+      'ASRock B650M PG Riptide',
+    ],
+    'AMD Ryzen 9 7950X': [
+      'ASUS ROG Crosshair X670E Hero',
+      'Gigabyte X670E AORUS Master',
+      'MSI MEG X670E ACE',
+      'ASRock X670E Taichi',
+    ],
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -92,13 +136,30 @@ class _BuildingPageState extends State<BuildingPage> {
                   context,
                   'Processor',
                   'assets/images/CPU.png',
-                  ['Intel i5', 'AMD Ryzen 5', 'Intel i7', 'AMD Ryzen 7'],
+                  ['Intel Core i3-12100F',
+                    'Intel Core i5-12400F',
+                    'Intel Core i7-13700K',
+                    'Intel Core i9-13900K',
+                    'AMD Ryzen 5 5600X',
+                    'AMD Ryzen 7 5800X',
+                    'AMD Ryzen 7 7700X',
+                    'AMD Ryzen 9 7950X'
+                  ],
                 ),
                 _buildComponentCard(
                   context,
                   'GPU',
                   'assets/images/GPU.png',
-                  ['NVIDIA RTX 3060', 'NVIDIA RTX 3070', 'AMD RX 6700 XT'],
+                  [
+                    'NVIDIA GeForce RTX 3060 Ti',
+                    'NVIDIA GeForce RTX 3070',
+                    'NVIDIA GeForce RTX 4070 Super',
+                    'NVIDIA GeForce RTX 4080',
+                    'AMD Radeon RX 6700 XT',
+                    'AMD Radeon RX 6800',
+                    'AMD Radeon RX 7900 XT',
+                    'AMD Radeon RX 7900 XTX'
+                  ],
                 ),
                 _buildComponentCard(
                   context,

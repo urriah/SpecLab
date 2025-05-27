@@ -5,7 +5,9 @@ import 'profile_page.dart';
 import 'builds_page.dart';
 
 class DashboardPage extends StatefulWidget {
-  const DashboardPage({super.key});
+  final String userEmail;
+  const DashboardPage({super.key, required this.userEmail});
+  
 
   @override
   _DashboardPageState createState() => _DashboardPageState();
@@ -48,6 +50,15 @@ class _DashboardPageState extends State<DashboardPage> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final double horizontalPadding = size.width * 0.06;
+    final double topPadding = size.height * 0.06;
+    final double logoSize = size.width * 0.18;
+    final double pageViewHeight = size.height * 0.28;
+    final double categoryCardHeight = size.height * 0.13;
+    final double actionTileWidth = (size.width - horizontalPadding * 2 - 10) / 2;
+    final double actionTileHeight = size.height * 0.18;
+
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -63,29 +74,32 @@ class _DashboardPageState extends State<DashboardPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.only(left: 25, top: 50, right: 25),
+                padding: EdgeInsets.only(
+                  left: horizontalPadding,
+                  top: topPadding,
+                  right: horizontalPadding,
+                ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Image.asset(
                       'assets/images/speclab1.png',
-                      width: 90,
-                      height: 90,
+                      width: logoSize,
+                      height: logoSize,
                       fit: BoxFit.contain,
                     ),
                     IconButton(
                       icon: const Icon(Icons.logout, color: Colors.black),
                       onPressed: () {
-                        // Logout logic here
-                        Navigator.pop(context); // Example: Navigate back to the login screen
+                        Navigator.pop(context);
                       },
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 10),
+              SizedBox(height: size.height * 0.01),
               SizedBox(
-                height: 250,
+                height: pageViewHeight,
                 child: PageView(
                   controller: _pageController,
                   children: [
@@ -96,41 +110,41 @@ class _DashboardPageState extends State<DashboardPage> {
                   ],
                 ),
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: size.height * 0.025),
 
               // Slidable Component Category Cards
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
                 child: SizedBox(
-                  height: 150,
+                  height: categoryCardHeight,
                   width: double.infinity,
                   child: ListView(
                     scrollDirection: Axis.horizontal,
                     children: [
-                      _buildCategoryCard('assets/images/CPU.png'),
-                      const SizedBox(width: 10),
-                      _buildCategoryCard('assets/images/GPU.png'),
-                      const SizedBox(width: 10),
-                      _buildCategoryCard('assets/images/MB.png'),
-                      const SizedBox(width: 10),
-                      _buildCategoryCard('assets/images/RAM.png'),
-                      const SizedBox(width: 10),
-                      _buildCategoryCard('assets/images/Storage.png'),
-                      const SizedBox(width: 10),
-                      _buildCategoryCard('assets/images/PSU.png'),
-                      const SizedBox(width: 10),
-                      _buildCategoryCard('assets/images/FAN.png'),
-                      const SizedBox(width: 10),
-                      _buildCategoryCard('assets/images/Case.png'),
+                      _buildCategoryCard('assets/images/CPU.png', categoryCardHeight),
+                      SizedBox(width: size.width * 0.025),
+                      _buildCategoryCard('assets/images/GPU.png', categoryCardHeight),
+                      SizedBox(width: size.width * 0.025),
+                      _buildCategoryCard('assets/images/MB.png', categoryCardHeight),
+                      SizedBox(width: size.width * 0.025),
+                      _buildCategoryCard('assets/images/RAM.png', categoryCardHeight),
+                      SizedBox(width: size.width * 0.025),
+                      _buildCategoryCard('assets/images/Storage.png', categoryCardHeight),
+                      SizedBox(width: size.width * 0.025),
+                      _buildCategoryCard('assets/images/PSU.png', categoryCardHeight),
+                      SizedBox(width: size.width * 0.025),
+                      _buildCategoryCard('assets/images/FAN.png', categoryCardHeight),
+                      SizedBox(width: size.width * 0.025),
+                      _buildCategoryCard('assets/images/Case.png', categoryCardHeight),
                     ],
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: size.height * 0.025),
 
               // Action Tiles using your asset images
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
                 child: Row(
                   children: [
                     // Build Your Rig Tile (larger)
@@ -142,8 +156,8 @@ class _DashboardPageState extends State<DashboardPage> {
                         );
                       },
                       child: Container(
-                        width: 180,
-                        height: 260,
+                        width: actionTileWidth,
+                        height: actionTileHeight * 1.45,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           boxShadow: [
@@ -166,19 +180,21 @@ class _DashboardPageState extends State<DashboardPage> {
                         ),
                       ),
                     ),
-                    const SizedBox(width: 10),
+                    SizedBox(width: size.width * 0.025),
                     Column(
                       children: [
                         GestureDetector(
                           onTap: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => const ProfilePage()),
+                              MaterialPageRoute(
+                                builder: (context) => ProfilePage(userEmail: widget.userEmail),
+                              ),
                             );
                           },
                           child: Container(
-                            width: 180,
-                            height: 122,
+                            width: actionTileWidth,
+                            height: actionTileHeight * 0.68,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
                               boxShadow: [
@@ -201,7 +217,7 @@ class _DashboardPageState extends State<DashboardPage> {
                             ),
                           ),
                         ),
-                        const SizedBox(height: 12),
+                        SizedBox(height: size.height * 0.015),
                         GestureDetector(
                           onTap: () {
                             Navigator.push(
@@ -212,8 +228,8 @@ class _DashboardPageState extends State<DashboardPage> {
                             );
                           },
                           child: Container(
-                            width: 180,
-                            height: 122,
+                            width: actionTileWidth,
+                            height: actionTileHeight * 0.68,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
                               boxShadow: [
@@ -241,7 +257,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   ],
                 ),
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: size.height * 0.025),
             ],
           ),
         ),
@@ -249,9 +265,10 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
-  Widget _buildCategoryCard(String imagePath) {
+  Widget _buildCategoryCard(String imagePath, double height) {
     return Container(
-      height: 100,
+      height: height,
+      width: height,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(15),
