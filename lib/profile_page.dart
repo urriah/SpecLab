@@ -40,11 +40,11 @@ class ProfilePage extends StatelessWidget {
             children: [
               const SizedBox(height: 60),
 
-              // Default Profile Photo
+
               CircleAvatar(
                 radius: 50,
                 backgroundColor: Color(0xFF381E72),
-                backgroundImage: AssetImage('assets/images/default_profile.png'), // <-- Place your default image here
+                backgroundImage: AssetImage('assets/images/default_profile.png'),
                 child: ClipOval(
                   child: Image.asset(
                     'assets/images/default_profile.png',

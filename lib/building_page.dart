@@ -65,6 +65,51 @@ class _BuildingPageState extends State<BuildingPage> {
     ],
   };
 
+  // Helper to determine RAM type based on selected motherboard
+  String? _getSelectedMoboRamType() {
+    final mobo = _selectedItems['Motherboard'] ?? '';
+    if (mobo.contains('DDR5')) return 'DDR5';
+    if (mobo.contains('DDR4')) return 'DDR4';
+    // Add more logic if you have motherboards with both types
+    return null;
+  }
+
+  List<String> _getCompatibleMemoryOptions() {
+    final ramType = _getSelectedMoboRamType();
+    List<String> ddr4 = [
+      'None',
+      '8GB DDR4',
+      '16GB DDR4',
+      '32GB DDR4',
+      '64GB DDR4',
+      '128GB DDR4',
+    ];
+    List<String> ddr5 = [
+      'None',
+      '8GB DDR5',
+      '16GB DDR5',
+      '32GB DDR5',
+      '64GB DDR5',
+      '128GB DDR5',
+    ];
+    if (ramType == 'DDR4') return ddr4;
+    if (ramType == 'DDR5') return ddr5;
+    // If no MOBO or unknown, show all
+    return [
+      'None',
+      '8GB DDR4',
+      '16GB DDR4',
+      '32GB DDR4',
+      '64GB DDR4',
+      '128GB DDR4',
+      '8GB DDR5',
+      '16GB DDR5',
+      '32GB DDR5',
+      '64GB DDR5',
+      '128GB DDR5',
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -136,7 +181,9 @@ class _BuildingPageState extends State<BuildingPage> {
                   context,
                   'Processor',
                   'assets/images/CPU.png',
-                  ['Intel Core i3-12100F',
+                  [
+                    'None',
+                    'Intel Core i3-12100F',
                     'Intel Core i5-12400F',
                     'Intel Core i7-13700K',
                     'Intel Core i9-13900K',
@@ -151,6 +198,7 @@ class _BuildingPageState extends State<BuildingPage> {
                   'GPU',
                   'assets/images/GPU.png',
                   [
+                    'None',
                     'NVIDIA GeForce RTX 3060 Ti',
                     'NVIDIA GeForce RTX 3070',
                     'NVIDIA GeForce RTX 4070 Super',
@@ -163,39 +211,70 @@ class _BuildingPageState extends State<BuildingPage> {
                 ),
                 _buildComponentCard(
                   context,
-                  'MOBO',
+                  'Motherboard',
                   'assets/images/MB.png',
-                  _getCompatibleComponents('MOBO'),
+                  _getCompatibleComponents('Motherboard'),
                 ),
                 _buildComponentCard(
                   context,
                   'Memory',
                   'assets/images/RAM.png',
-                  ['8GB DDR4', '16GB DDR4', '32GB DDR4'],
+                  _getCompatibleMemoryOptions(),
                 ),
                 _buildComponentCard(
                   context,
                   'Storage',
                   'assets/images/Storage.png',
-                  ['1TB HDD', '512GB SSD', '1TB SSD'],
+                  [
+                    'None',
+                    '1TB HDD',
+                    '2TB HDD',
+                    '4TB HDD',
+                    '256GB SSD',
+                    '512GB SSD',
+                    '1TB SSD',
+                    '2TB SSD',
+                    '500GB NVMe',
+                    '1TB NVMe',
+                    '2TB NVMe',
+                  ],
                 ),
                 _buildComponentCard(
                   context,
                   'PSU',
                   'assets/images/PSU.png',
-                  ['500W', '650W', '750W'],
+                  _getCompatiblePSUOptions(),
                 ),
                 _buildComponentCard(
                   context,
                   'Cooling',
                   'assets/images/FAN.png',
-                  ['Air Cooler', 'Liquid Cooler'],
+                  [
+                    'None',
+                    'Air Cooler',
+                    'Liquid Cooler',
+                    'Noctua NH-D15',
+                    'Cooler Master Hyper 212',
+                    'Corsair iCUE H150i',
+                    'NZXT Kraken X63',
+                    'be quiet! Dark Rock Pro 4',
+                  ],
                 ),
                 _buildComponentCard(
                   context,
                   'Case',
                   'assets/images/Case.png',
-                  ['Mid Tower', 'Full Tower'],
+                  [
+                    'None',
+                    'Mid Tower',
+                    'Full Tower',
+                    'Mini Tower',
+                    'Corsair 4000D',
+                    'NZXT H510',
+                    'Fractal Design Meshify C',
+                    'Lian Li PC-O11 Dynamic',
+                    'Phanteks Eclipse P400A',
+                  ],
                 ),
                 const SizedBox(height: 20),
                 Center(
@@ -376,47 +455,126 @@ class _BuildingPageState extends State<BuildingPage> {
   void _showOptions(BuildContext context, String title, List<String> options) {
     showModalBottomSheet(
       context: context,
+      isScrollControlled: true, // Allow the sheet to take more space
       builder: (BuildContext context) {
-        return Container(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                'Select $title',
-                style: const TextStyle(
-                  fontFamily: 'Alexandria',
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF381E72),
-                ),
-              ),
-              const SizedBox(height: 10),
-              ...options.map(
-                (option) => ListTile(
-                  title: Text(
-                    option,
-                    style: const TextStyle(fontFamily: 'Alexandria'),
+        return DraggableScrollableSheet(
+          expand: false,
+          initialChildSize: 0.6,
+          minChildSize: 0.3,
+          maxChildSize: 0.9,
+          builder: (context, scrollController) {
+            return Container(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                children: [
+                  Text(
+                    'Select $title',
+                    style: const TextStyle(
+                      fontFamily: 'Alexandria',
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF381E72),
+                    ),
                   ),
-                  onTap: () {
-                    setState(() {
-                      _selectedItems[title] = option;
-                    });
-                    Navigator.pop(context);
-                  },
-                ),
+                  const SizedBox(height: 10),
+                  Expanded(
+                    child: ListView(
+                      controller: scrollController,
+                      children: options.map(
+                        (option) => ListTile(
+                          title: Text(
+                            option,
+                            style: const TextStyle(fontFamily: 'Alexandria'),
+                          ),
+                          onTap: () {
+                            setState(() {
+                              _selectedItems[title] = option;
+                            });
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ).toList(),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            );
+          },
         );
       },
     );
   }
 
   List<String> _getCompatibleComponents(String componentType) {
-    if (componentType == 'MOBO' && _selectedItems.containsKey('Processor')) {
-      return _compatibilityMap[_selectedItems['Processor']] ?? [];
+    if (componentType == 'Motherboard' && _selectedItems.containsKey('Processor')) {
+      return ['None', ...(_compatibilityMap[_selectedItems['Processor']] ?? [])];
     }
     return ['None'];
+  }
+
+  // PSU compatibility logic
+  int _estimateRequiredWattage() {
+    final cpu = _selectedItems['Processor'] ?? '';
+    final gpu = _selectedItems['GPU'] ?? '';
+
+    int wattage = 150; // base system
+
+    // CPU wattage
+    if (cpu.contains('i9') || cpu.contains('Ryzen 9')) wattage += 150;
+    else if (cpu.contains('i7') || cpu.contains('Ryzen 7')) wattage += 120;
+    else if (cpu.contains('i5') || cpu.contains('Ryzen 5')) wattage += 90;
+    else if (cpu.isNotEmpty && cpu != 'None') wattage += 70;
+
+    // GPU wattage
+    if (gpu.contains('RTX 4080') || gpu.contains('RX 7900 XTX')) wattage += 320;
+    else if (gpu.contains('RTX 4070') || gpu.contains('RX 7900 XT')) wattage += 280;
+    else if (gpu.contains('RTX 3070') || gpu.contains('RX 6800')) wattage += 220;
+    else if (gpu.contains('RTX 3060') || gpu.contains('RX 6700')) wattage += 170;
+    else if (gpu.isNotEmpty && gpu != 'None') wattage += 120;
+
+    return wattage;
+  }
+
+  List<String> _getCompatiblePSUOptions() {
+    // Use only realistic, commonly available PSU wattages
+    final allPSUs = [
+      'None',
+      '400W',
+      '450W',
+      '500W',
+      '550W',
+      '600W',
+      '650W',
+      '700W',
+      '750W',
+      '800W',
+      '850W',
+      '1000W',
+      '1200W',
+      'Corsair RM750x',
+      'EVGA SuperNOVA 850 G5',
+      'Seasonic Focus GX-650',
+    ];
+
+    int required = _estimateRequiredWattage();
+
+    List<String> filtered = allPSUs.where((psu) {
+      if (psu == 'None') return true;
+      final match = RegExp(r'(\d{3,4})W').firstMatch(psu);
+      if (match != null) {
+        int psuWatt = int.parse(match.group(1)!);
+        return psuWatt >= required;
+      }
+      // For named PSUs, include if their wattage is in the name and sufficient
+      if (psu.contains('750') && required <= 750) return true;
+      if (psu.contains('850') && required <= 850) return true;
+      if (psu.contains('650') && required <= 650) return true;
+      if (psu.contains('1000') && required <= 1000) return true;
+      if (psu.contains('1200') && required <= 1200) return true;
+      return false;
+    }).toList();
+
+    if (!filtered.contains('None')) filtered.insert(0, 'None');
+    return filtered;
   }
 }
